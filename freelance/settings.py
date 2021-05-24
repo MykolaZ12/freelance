@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'freelance.users',
 
+    'drf_yasg',
     'rest_framework_simplejwt',
     'djoser',
     'rest_framework',
