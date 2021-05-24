@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'freelance.users',
+
+    'rest_framework_simplejwt',
+    'djoser',
     'rest_framework',
 ]
 
@@ -75,12 +79,12 @@ WSGI_APPLICATION = 'freelance.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("SQL_DATABASE"),
-        "USER": os.environ.get("SQL_USER"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD"),
-        "HOST": os.environ.get("SQL_HOST"),
-        "PORT": os.environ.get("SQL_PORT"),
+        "ENGINE": os.environ.get("SQL_ENGINE", 'django.db.backends.postgresql'),
+        "NAME": os.environ.get("SQL_DATABASE", 'freelance'),
+        "USER": os.environ.get("SQL_USER", 'admin'),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", 'admin'),
+        "HOST": os.environ.get("SQL_HOST", 'localhost'),
+        "PORT": os.environ.get("SQL_PORT", '5432'),
     }
 }
 
@@ -115,12 +119,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
+DJOSER = {
+    'SERIALIZERS': {
+        'user': 'freelance.users.serializers.CustomUserSerializer',
+        'user_create': 'freelance.users.serializers.CustomUserCreateSerializer',
+    },
+}
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+AUTH_USER_MODEL = 'users.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
