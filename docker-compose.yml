@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+    db:
+        image: postgres
+        container_name: postgres
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        env_file:
+            - ./databese.env
+    backend:
+      restart: unless-stopped
+      container_name: backend
+      env_file:
+        - backend.env
+      build: .
+      entrypoint: /app/wsgi-entrypoint.sh
+      volumes:
+        - .:/app
+      ports:
+        - 8000:8000
+      depends_on:
+        - db
+volumes:
+    postgres_data:

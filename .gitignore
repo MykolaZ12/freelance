@@ -3,3 +3,8 @@ __pycache__/
 */__pycache__/
 .idea
 idea
+
+data
+static
+databese.env
+backend.env
