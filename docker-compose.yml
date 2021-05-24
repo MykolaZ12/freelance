@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
     db:
-        image: postgres
+        image: postgres:13.3
         container_name: postgres
         volumes:
           - postgres_data:/var/lib/postgresql/data
         env_file:
-            - ./databese.env
+            - ./database.env
     backend:
       restart: unless-stopped
       container_name: backend
