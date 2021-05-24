@@ -15,4 +15,4 @@ echo "Starting collectstatic"
 python manage.py collectstatic --noinput
 
 echo "Starting server"
-python manage.py runserver 0.0.0.0:8000
+gunicorn freelance.wsgi --bind 0.0.0.0:8000 --workers 4 --threads 4
