@@ -19,9 +19,11 @@ class IsCustomer(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        if request.user.is_anonymous:
-            return False
-        return request.user.user_type == "Customer"
+        return bool(
+            request.method in permissions.SAFE_METHODS or
+            request.user and request.user.is_authenticated and
+            request.user.user_type == "Customer"
+        )
 
 
 class IsExecutor(permissions.BasePermission):
@@ -30,4 +32,8 @@ class IsExecutor(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user.user_type == "Executor"
+        return bool(
+            request.method in permissions.SAFE_METHODS or
+            request.user and request.user.is_authenticated and
+            request.user.user_type == "Executor"
+        )
