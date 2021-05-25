@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 User = get_user_model()
 
@@ -17,7 +19,7 @@ class Advert(models.Model):
                                  null=True, blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    award = models.DecimalField(default=0, max_digits=5, decimal_places=2)
+    award = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     status = models.CharField(max_length=3, choices=STATUS, default='WAI')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -41,10 +43,13 @@ class AdvertFile(models.Model):
         return f'{self.file.name}'
 
 
-class Comment(models.Model):
+class Comment(MPTTModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     advert = models.ForeignKey(Advert, on_delete=models.CASCADE)
     text = models.TextField("comment content", max_length=5000)
+    parent = TreeForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True, related_name='children'
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
