@@ -16,7 +16,7 @@ class AdvertViewSet(viewsets.ModelViewSet):
 class FileViewSet(viewsets.ModelViewSet):
     queryset = AdvertFile.objects.all()
     serializer_class = serializers.FileSerializer
-    permission_classes = [custom_perm.IsExecutor]
+    permission_classes = [custom_perm.IsCustomer, permissions.IsAuthenticatedOrReadOnly]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
