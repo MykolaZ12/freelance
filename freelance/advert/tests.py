@@ -67,3 +67,10 @@ class AdvertTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
         response = self.client.post(url, {"file": mock_file}, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_advert_response(self):
+        url = f"/api/v1/advert/{self.advert.id}/response/"
+        token = AccessToken.for_user(self.executor)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        response = self.client.post(url, {"text": "some text"}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
-from freelance.advert.models import Advert, AdvertFile, Comment
+from freelance.advert.models import Advert, AdvertFile, Comment, AdvertResponse
 from freelance.advert import serializers, permissions as custom_permissions
 
 
@@ -36,6 +36,15 @@ class AdvertViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user, advert_id=pk)
         return Response(status=status.HTTP_201_CREATED)
 
+    @action(methods=['post'], detail=True, url_path='response', url_name='response',
+            permission_classes=[custom_permissions.IsExecutor],
+            serializer_class=serializers.AdvertResponseSerializer)
+    def response(self, request, pk=None):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(executor=self.request.user, advert_id=pk)
+        return Response(status=status.HTTP_201_CREATED)
+
 
 class FileViewSet(viewsets.ModelViewSet):
     queryset = AdvertFile.objects.all()
@@ -53,3 +62,12 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class AdvertResponseViewSet(viewsets.ModelViewSet):
+    queryset = AdvertResponse.objects.all()
+    serializer_class = serializers.AdvertResponseSerializer
+    permission_classes = [custom_permissions.IsExecutor]
+
+    def perform_create(self, serializer):
+        serializer.save(executor=self.request.user)

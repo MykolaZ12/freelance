@@ -55,3 +55,14 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return f"{self.user.email} - {self.advert.title}"
+
+
+class AdvertResponse(models.Model):
+    executor = models.ForeignKey(User, on_delete=models.CASCADE)
+    advert = models.ForeignKey(Advert, on_delete=models.CASCADE)
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.advert.title} - {self.executor.email}"
