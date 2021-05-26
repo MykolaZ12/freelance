@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from freelance.advert.models import Advert, AdvertFile, Comment, AdvertResponse
-from freelance.users.serializers import CustomUserSerializer
 
 
 class AdvertSerializer(serializers.ModelSerializer):
@@ -12,12 +11,15 @@ class AdvertSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
-    advert = AdvertSerializer(read_only=True)
-
     class Meta:
         model = AdvertFile
-        fields = ["id", "file", "user", "advert", "created"]
+        fields = ["id", "file", "advert", "created"]
+
+
+class ActionFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvertFile
+        fields = ["file"]
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -27,9 +29,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class AdvertResponseSerializer(serializers.ModelSerializer):
-    executor = CustomUserSerializer(read_only=True)
-    advert = AdvertSerializer(read_only=True)
-
     class Meta:
         model = AdvertResponse
         fields = ["id", "executor", "advert", "text", "created"]
+
+
+class ActionAdvertResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvertResponse
+        fields = ["text"]

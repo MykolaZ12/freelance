@@ -16,7 +16,7 @@ class AdvertViewSet(viewsets.ModelViewSet):
         serializer.save(customer=self.request.user)
 
     @action(methods=['post'], detail=True, url_path='file', url_name='upload_file',
-            serializer_class=serializers.FileSerializer)
+            serializer_class=serializers.ActionFileSerializer)
     def upload_file(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -24,7 +24,7 @@ class AdvertViewSet(viewsets.ModelViewSet):
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     @action(methods=['post'], detail=True, url_path='file/bulk_create',
-            url_name='upload_many_files', serializer_class=serializers.FileSerializer)
+            url_name='upload_many_files', serializer_class=serializers.ActionFileSerializer)
     def upload_many_files(self, request, pk=None):
         try:
             files = request.FILES.getlist('file')
@@ -38,7 +38,7 @@ class AdvertViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=True, url_path='response', url_name='response',
             permission_classes=[custom_permissions.IsExecutor],
-            serializer_class=serializers.AdvertResponseSerializer)
+            serializer_class=serializers.ActionAdvertResponseSerializer)
     def response(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
